@@ -26,7 +26,7 @@ class AsyncTask:
             return
 
         args.reverse()
-        self.input_image_id = args.pop()
+
         self.generate_image_grid = args.pop()
         self.prompt = args.pop()
         self.negative_prompt = args.pop()
@@ -884,7 +884,10 @@ def worker():
                 async_task.current_tab == 'ip' and async_task.mixing_image_prompt_and_inpaint)) \
                 and isinstance(async_task.inpaint_input_image, dict):
             inpaint_image = async_task.inpaint_input_image['image']
-            inpaint_mask = async_task.inpaint_input_image['mask'][:, :, 0]
+            if async_task.inpaint_input_image['mask'] is not None:
+                inpaint_mask = async_task.inpaint_input_image['mask'][:, :, 0]
+            else:    
+                inpaint_mask = async_task.inpaint_input_image['image'][:, :, 0]
 
             if async_task.inpaint_advanced_masking_checkbox:
                 if isinstance(async_task.inpaint_mask_image_upload, dict):
