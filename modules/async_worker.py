@@ -544,6 +544,7 @@ def worker():
         return denoising_strength, initial_latent, width, height, current_progress
 
     def apply_outpaint(async_task, inpaint_image, inpaint_mask):
+        
         if len(async_task.outpaint_selections) > 0:
             H, W, C = inpaint_image.shape
             if H > W:
@@ -551,6 +552,7 @@ def worker():
                   inpaint_image = np.pad(inpaint_image, [[int(H * 0.3), 0], [0, 0], [0, 0]], mode='edge')
                   inpaint_mask = np.pad(inpaint_mask, [[int(H * 0.3), 0], [0, 0]], mode='constant',
                                         constant_values=255)
+                  
               if 'bottom' in async_task.outpaint_selections:
                   inpaint_image = np.pad(inpaint_image, [[0, int(H * 0.5)], [0, 0], [0, 0]], mode='edge')
                   inpaint_mask = np.pad(inpaint_mask, [[0, int(H * 0.5)], [0, 0]], mode='constant',
@@ -887,7 +889,7 @@ def worker():
             if async_task.inpaint_input_image['mask'] is not None:
                 inpaint_mask = async_task.inpaint_input_image['mask'][:, :, 0]
             else:    
-                inpaint_mask = async_task.inpaint_input_image['image'][:, :, 0]
+                inpaint_mask = np.zeros(async_task.inpaint_input_image['image'][:, :, 0].shape)
 
             if async_task.inpaint_advanced_masking_checkbox:
                 if isinstance(async_task.inpaint_mask_image_upload, dict):
@@ -905,12 +907,14 @@ def worker():
                     async_task.inpaint_mask_image_upload = np.mean(async_task.inpaint_mask_image_upload, axis=2)
                     async_task.inpaint_mask_image_upload = (async_task.inpaint_mask_image_upload > 127).astype(
                         np.uint8) * 255
+
                     inpaint_mask = np.maximum(inpaint_mask, async_task.inpaint_mask_image_upload)
 
             if int(async_task.inpaint_erode_or_dilate) != 0:
                 inpaint_mask = erode_or_dilate(inpaint_mask, async_task.inpaint_erode_or_dilate)
 
             if async_task.invert_mask_checkbox:
+                print('async_task.invert_mask_checkbox ', async_task.invert_mask_checkbox)
                 inpaint_mask = 255 - inpaint_mask
 
             inpaint_image = HWC3(inpaint_image)
@@ -954,6 +958,8 @@ def worker():
             goals.append('enhance')
             skip_prompt_processing = True
             async_task.enhance_input_image = HWC3(async_task.enhance_input_image)
+        
+
         return base_model_additional_loras, clip_vision_path, controlnet_canny_path, controlnet_cpds_path, inpaint_head_model_path, inpaint_image, inpaint_mask, ip_adapter_face_path, ip_adapter_path, ip_negative_path, skip_prompt_processing, use_synthetic_refiner
 
     def prepare_upscale(async_task, goals, uov_input_image, uov_method, performance, steps, current_progress,
