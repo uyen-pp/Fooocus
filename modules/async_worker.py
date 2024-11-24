@@ -577,14 +577,14 @@ def worker():
                                                 constant_values=255)
                     
                     if 'bottom' in async_task.outpaint_selections:
-                        fac = random.randint(fac, 15, 1)
+                        fac = random.randint(fac, 12)
                         inpaint_image = np.pad(inpaint_image, [[0, int(H * 0.1 * fac)], [0, 0], [0, 0]], mode='edge')
                         inpaint_mask = np.pad(inpaint_mask, [[0, int(H * 0.1 * fac)], [0, 0]], mode='constant',
                                                 constant_values=255)
 
                     H, W, C = inpaint_image.shape
                     if 'left' in async_task.outpaint_selections:
-                        fac = 0.1*random.randint(3, 15, 1)
+                        fac = 0.1*random.randint(3, 15)
                         inpaint_image = np.pad(inpaint_image, [[0, 0], [int(W * fac), 0], [0, 0]], mode='edge')
                         inpaint_mask = np.pad(inpaint_mask, [[0, 0], [int(W * fac), 0]], mode='constant',
                                                 constant_values=255)
