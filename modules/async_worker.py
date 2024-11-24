@@ -569,7 +569,7 @@ def worker():
                     inpaint_mask = np.pad(inpaint_mask, [[0, 0], [0, int(W * 0.3)]], mode='constant',
                                         constant_values=255)
             else:
-                if H > W:
+                if H > W: # Tranh doc
                     if 'top' in async_task.outpaint_selections:
                         fac = random.randint(3, 10)
                         inpaint_image = np.pad(inpaint_image, [[int(H * 0.1 * fac), 0], [0, 0], [0, 0]], mode='edge')
@@ -592,14 +592,14 @@ def worker():
                         inpaint_image = np.pad(inpaint_image, [[0, 0], [0, int(H-W-W*fac)], [0, 0]], mode='edge')
                         inpaint_mask = np.pad(inpaint_mask, [[0, 0], [0, int(H-W-W*fac)]], mode='constant',
                                                 constant_values=255)
-                else:
+                else: # Tranh ngang
                     if 'left' in async_task.outpaint_selections:
-                        fac = 0.1*random.randint(2, 10)
+                        fac = 0.1*random.randint(2, 9)
                         inpaint_image = np.pad(inpaint_image, [[0, 0], [int(W * fac), 0], [0, 0]], mode='edge')
                         inpaint_mask = np.pad(inpaint_mask, [[0, 0], [int(W * fac), 0]], mode='constant',
                                                 constant_values=255)
                     if 'right' in async_task.outpaint_selections:
-                        fac = 0.1*random.randint(2, 10)
+                        fac = 0.1*random.randint(2, 9)
                         inpaint_image = np.pad(inpaint_image, [[0, 0], [0, int(W*fac)], [0, 0]], mode='edge')
                         inpaint_mask = np.pad(inpaint_mask, [[0, 0], [0, int(W*fac)]], mode='constant',
                                             constant_values=255)
