@@ -594,19 +594,19 @@ def worker():
                                                 constant_values=255)
                 else: # Tranh ngang
                     if 'left' in async_task.outpaint_selections:
-                        fac = 0.1*random.randint(1, 9)
+                        fac = 0.1*random.randint(2, 5)
                         inpaint_image = np.pad(inpaint_image, [[0, 0], [int(W * fac), 0], [0, 0]], mode='edge')
                         inpaint_mask = np.pad(inpaint_mask, [[0, 0], [int(W * fac), 0]], mode='constant',
                                                 constant_values=255)
                     if 'right' in async_task.outpaint_selections:
-                        fac = 0.1*random.randint(1, 9)
+                        fac = 0.1*random.randint(2, 5)
                         inpaint_image = np.pad(inpaint_image, [[0, 0], [0, int(W*fac)], [0, 0]], mode='edge')
                         inpaint_mask = np.pad(inpaint_mask, [[0, 0], [0, int(W*fac)]], mode='constant',
                                             constant_values=255)
                     
                     H, W, C = inpaint_image.shape
                     if 'top' in async_task.outpaint_selections:
-                        fac = 0.1 * random.randint(3, 10)
+                        fac = 0.1 * random.randint(3, 15)
                         inpaint_image = np.pad(inpaint_image, [[int(H * fac), 0], [0, 0], [0, 0]], mode='edge')
                         inpaint_mask = np.pad(inpaint_mask, [[int(H * fac), 0], [0, 0]], mode='constant',
                                                 constant_values=255)
