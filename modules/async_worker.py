@@ -570,8 +570,9 @@ def worker():
                                         constant_values=255)
             else:
                 if H > W: # Tranh doc
+
                     top_pad = int(random.randint(10, 70)/100 * H) # top space is at 10-70% of height of the pic 
-                    bottom_pad = 2*H - top_pad # Total height is 3H, bottom pad > top pad
+                    bottom_pad = random.randint(top_pad, H) # maximum total height is 2H, bottom pad > top pad
                     
                     if 'top' in async_task.outpaint_selections:
                         inpaint_image = np.pad(inpaint_image, [[top_pad, 0], [0, 0], [0, 0]], mode='edge')
@@ -599,17 +600,17 @@ def worker():
                                                 constant_values=255)
                         
                 else: # Tranh ngang
-                    left_pad = int(random.randint(50, 250)/100 * W)
-                    right_pad = 2*W - left_pad
+                    left_right_pad = int(random.randint(10, 70)/100 * W)
+
                     if 'left' in async_task.outpaint_selections:
                         fac = 0.1*random.randint(2, 5)
-                        inpaint_image = np.pad(inpaint_image, [[0, 0], [left_pad, 0], [0, 0]], mode='edge')
-                        inpaint_mask = np.pad(inpaint_mask, [[0, 0], [left_pad, 0]], mode='constant',
+                        inpaint_image = np.pad(inpaint_image, [[0, 0], [left_right_pad, 0], [0, 0]], mode='edge')
+                        inpaint_mask = np.pad(inpaint_mask, [[0, 0], [left_right_pad, 0]], mode='constant',
                                                 constant_values=255)
                     if 'right' in async_task.outpaint_selections:
                         fac = 0.1*random.randint(2, 5)
-                        inpaint_image = np.pad(inpaint_image, [[0, 0], [0, right_pad], [0, 0]], mode='edge')
-                        inpaint_mask = np.pad(inpaint_mask, [[0, 0], [0, right_pad]], mode='constant',
+                        inpaint_image = np.pad(inpaint_image, [[0, 0], [0, left_right_pad], [0, 0]], mode='edge')
+                        inpaint_mask = np.pad(inpaint_mask, [[0, 0], [0, left_right_pad]], mode='constant',
                                             constant_values=255)
                     
                     H, W, _ = inpaint_image.shape
